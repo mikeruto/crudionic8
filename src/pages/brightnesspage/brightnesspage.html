@@ -1,0 +1,26 @@
+<ion-header>
+  <ion-navbar>
+        <button ion-button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+        </button>
+        <ion-title>Brightness</ion-title>
+    </ion-navbar>
+</ion-header>
+
+
+
+<ion-content padding>
+    <ion-card>
+        <ion-card-header>
+            <h1>Brightness</h1>
+        </ion-card-header>
+        <ion-card-content>
+            <ion-range color="secondary" min="0" max="10" step="1" (ionChange)="setBrightness()" [(ngModel)]="brightness">
+                <ion-label range-left>0</ion-label>
+                <ion-label range-right>1</ion-label>
+            </ion-range>
+        </ion-card-content>
+    </ion-card>
+    <button ion-button (click)="getBrightness()">Get Brightness</button>
+    <button ion-button (click)="toggleScreenSleep()">{{screenSleep ? "Don't keep the scren on" : "Keep the screen on"}}</button>
+</ion-content>

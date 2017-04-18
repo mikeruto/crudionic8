@@ -1,0 +1,17 @@
+<ion-header>
+  <ion-navbar>
+        <button ion-button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+        </button>
+        <ion-title>Camera upload</ion-title>
+    </ion-navbar>
+</ion-header>
+
+
+
+<ion-content padding>
+    <img [src]="imgsource" alt="">
+    <button ion-button (click)="takePicture()">
+            <ion-icon name="camera">Take picture</ion-icon>
+    </button>
+</ion-content>

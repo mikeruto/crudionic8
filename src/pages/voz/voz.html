@@ -1,0 +1,30 @@
+<ion-header>
+  <ion-navbar>
+        <button ion-button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+        </button>
+        <ion-title>voz (text to speech) and (speech recognition)</ion-title>
+    </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+    <ion-item>
+        <ion-label stacked>Text</ion-label>
+        <ion-textarea row="5" [(ngModel)]="text" ></ion-textarea>
+    </ion-item>
+    <button clear ion-button (click)="sayText()">Text to speech</button>
+    
+    <button ion-button (click)="isSpeechSupported()">Is speech supported ?</button>
+    <button ion-button (click)="getPermission()">Get Permission</button>
+    <button ion-button (click)="hasPermission()">Has Permission ?</button>
+    <button ion-button (click)="getSupportedLanguages()">Get Supported Languages</button>
+    <button ion-button (click)="listenForSpeech()">Listen for speech</button>
+    
+    
+    <ion-card>
+        <ion-card-content *ngFor="let speech of speechList" >
+            <p>{{speech}}</p>
+        </ion-card-content>    
+    </ion-card>
+</ion-content>

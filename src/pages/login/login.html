@@ -1,0 +1,23 @@
+<ion-content padding >
+    <img src="img/splash.png"/>
+    <ion-card text-center>
+        
+        <p><button   (click)="fblogin()" ion-button color="facebook">
+            <ion-icon name="logo-facebook"></ion-icon>
+            &nbsp;&nbsp;  Login with Facebook
+            </button></p>
+        
+        <p><button   (click)="googlelogin()" ion-button color="google">
+            <ion-icon name="logo-google"></ion-icon>
+            &nbsp;&nbsp;  Login with Google
+        </button></p>
+        
+        <p><button   (click)="twitterlogin()" ion-button color="twitter">
+            <ion-icon name="logo-twitter"></ion-icon>
+            &nbsp;&nbsp;  Login with Twitter
+        </button></p>
+
+        <p><button  (click)="noLogin()" ion-button>No Login</button></p>
+    </ion-card>
+
+</ion-content>
