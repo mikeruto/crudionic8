@@ -68,5 +68,6 @@
   <plugin name="cordova-plugin-googleplus" spec="~5.1.1">
     <variable name="REVERSED_CLIENT_ID" value="100887066112-upbdkblnhvnu5kn37sdar7h2tkhl37m4.apps.googleusercontent.com"/>
   </plugin>
+  <plugin name="cordova-plugin-shake" spec="~0.5.4"/>
   <icon src="resources\android\icon\drawable-xhdpi-icon.png"/>
 </widget>

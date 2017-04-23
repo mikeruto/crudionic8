@@ -24,6 +24,7 @@ export class MyApp {
 
         this.pages = [
             {title: 'Tabla3', component: "Tabla3", icon: 'list'},
+            {title: 'Tabla4', component: "Tabla4", icon: 'list'},
             {title: 'Voz', component: "Voz", icon: 'mic'},
             {title: 'Subir imagenes', component: "Imageupload", icon: 'cloud-upload'},
             {title: 'Linterna', component: "Flashlightpage", icon: 'bulb'},
@@ -35,7 +36,8 @@ export class MyApp {
             {title: 'Vibracion', component: "Vibrationpage", icon: 'pulse'},
             {title: 'QR', component: "Barcode", icon: 'qr-scanner'},
             {title: 'Camera upload firebase', component: "Cameraupload", icon: 'photos'},
-            {title: 'Street view', component: "Streetview", icon: 'move'}
+            {title: 'Street view', component: "Streetview", icon: 'move'},
+            {title: 'Shake', component: "Shakepage", icon: 'resize'}
         ];
     }
 

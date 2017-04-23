@@ -1,0 +1,31 @@
+<ion-header>
+    <ion-navbar>
+        <button ion-button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+        </button>
+        <ion-title>Tabla4</ion-title>
+        <ion-buttons end>
+            <button end ion-button icon-only (click)='add()'><ion-icon name='add'></ion-icon></button>
+        </ion-buttons> 
+    </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+    <ion-list>
+        <ion-item-sliding *ngFor="let tabla4 of tablas4 | async">
+            <ion-item>
+                <ion-thumbnail item-left>
+                    <img [src]="tabla4.image" >
+                </ion-thumbnail>
+                <h2>{{tabla4.name}}</h2>
+                <p>{{tabla4.price}}</p>
+                <p >{{tabla4.description}}</p>
+                <!--<p><span am-time-ago="tabla3.created_at"></span></p>-->
+            </ion-item>    
+            <ion-item-options side="right">
+                <button ion-button color="secondary" (click)="edit(tabla4)"><ion-icon name="md-create"></ion-icon>Editar</button>
+                <button ion-button color="danger" (click)="delete(tabla4.$key)"><ion-icon name="md-trash"></ion-icon>Eliminar</button>
+            </ion-item-options> 
+        </ion-item-sliding>
+    </ion-list>
+</ion-content>

@@ -25,6 +25,8 @@ import {Vibration} from '@ionic-native/vibration';
 import {BarcodeScanner} from '@ionic-native/barcode-scanner';
 import {Facebook} from '@ionic-native/facebook';
 import { GooglePlus } from '@ionic-native/google-plus';
+import { Shake } from '@ionic-native/shake';
+
 
 
 
@@ -80,7 +82,8 @@ export const firebaseConfig = {
         Vibration,
         BarcodeScanner,
         Facebook,
-        GooglePlus
+        GooglePlus,
+        Shake
     ]
 })
 export class AppModule {}
