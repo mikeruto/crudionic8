@@ -23,18 +23,12 @@ export class Tabla4 {
         });
     }
     edit(tabla4): void {
-       /* console.log(this.dom.bypassSecurityTrustResourceUrl(tabla4));
-        console.log(this.dom.bypassSecurityTrustHtml(tabla4));
-        console.log(this.dom.bypassSecurityTrustStyle(tabla4));
-        console.log(this.dom.bypassSecurityTrustScript(tabla4));
-        console.log(this.dom.bypassSecurityTrustUrl(tabla4));*/
-        
         this.navCtrl.push("Tabla4modal", {
             tabla4: tabla4
         });
     }
 
-    delete(tabla4Id): void {
+    delete(tabla4): void {
         let prompt = this.alertCtrl.create({
             title: 'Eliminar registro',
             message: '¿ Desea eliminar este registro ?',
@@ -48,12 +42,21 @@ export class Tabla4 {
                 {
                     text: 'Delete',
                     handler: data => {
-                        this.tablas4.remove(tabla4Id);
+                    //borrado de imagenes del firestore
+                    var imagen = tabla4.image;  
+                    var arrayURLimagenAnterior = imagen.split("https://firebasestorage.googleapis.com/v0/b/firebase-crudionic.appspot.com/o/images%2F");
+                    var arrayNombreArchivoImagen = arrayURLimagenAnterior[1].split("?");
+                    var nombreArchivoImagen = arrayNombreArchivoImagen[0];
+                    var imagenParaBorrar = this.firestore.ref().child("images/" + nombreArchivoImagen);
+                    var thumbnailParaBorrar = this.firestore.ref().child("images/thumb_" + nombreArchivoImagen);
+                    imagenParaBorrar.delete();
+                    thumbnailParaBorrar.delete();
+                    //borrado de registro de la base de datos.
+                    this.tablas4.remove(tabla4.$key);
                     }
                 }
             ]
         });
-
         prompt.present();
     }
 

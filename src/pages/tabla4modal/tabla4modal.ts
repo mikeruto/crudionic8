@@ -21,32 +21,32 @@ import {DomSanitizer} from '@angular/platform-browser';
      <ion-label stacked>Name</ion-label>
      <ion-input formControlName="name"  type="text" placeholder="Ingresa el nombre" [class.invalid]="!tabla4Form.controls.name.valid && tabla4Form.controls.name.dirty"></ion-input>
  </ion-item>
- <ion-item class="error-message" *ngIf="!tabla4Form.controls.name.valid && tabla4Form.controls.name.dirty"><p>El nombre como maximo puede tener 20 caracteres.</p></ion-item>
+ <ion-item class="error-message" *ngIf="!tabla4Form.controls.name.valid && tabla4Form.controls.name.dirty"><p style="color:red;"Como maximo puede ingresar 20 caracteres.</p></ion-item>
  
  <ion-item>
     <ion-label stacked>Description</ion-label>
    <ion-input formControlName="description" type="text" placeholder="Ingresa la descripcion" [class.invalid]="!tabla4Form.controls.description.valid && tabla4Form.controls.description.dirty"></ion-input>
 </ion-item>
-<ion-item class="error-message" *ngIf="!tabla4Form.controls.description.valid && tabla4Form.controls.description.dirty"><p>La descripcion como minimo debe tener 5 caracteres.</p></ion-item>
+<ion-item class="error-message" *ngIf="!tabla4Form.controls.description.valid && tabla4Form.controls.description.dirty"><p style="color:red;">Como minimo ingresar 5 caracteres.</p></ion-item>
 
 <ion-item>
     <ion-label stacked>Imagen</ion-label>
     <ion-input  formControlName="image" type="text" placeholder="Ingresa la imagen" [class.invalid]="!tabla4Form.controls.image.valid && tabla4Form.controls.image.dirty"></ion-input>
 </ion-item>
-<ion-item class="error-message" *ngIf="!tabla4Form.controls.image.valid && tabla4Form.controls.image.dirty"><p>La imagen como minimo debe tener 5 caracteres.</p></ion-item>
+<ion-item class="error-message" *ngIf="!tabla4Form.controls.image.valid && tabla4Form.controls.image.dirty"><p style="color:red;">Debe ingresar la imagen.</p></ion-item>
 <img alt=""  [src]="image" width="80" height="80">
 <button ion-button type="button" (click)="takePicture()"><ion-icon name="camera"></ion-icon></button>
 
 <ion-item>
     <ion-label stacked>Precio</ion-label>
     <ion-input formControlName="price" type="number" placeholder="Ingresa el precio" [class.invalid]="!tabla4Form.controls.price.valid && tabla4Form.controls.price.dirty"></ion-input></ion-item>
-<ion-item class="error-message" *ngIf="!tabla4Form.controls.price.valid && tabla4Form.controls.price.dirty"><p>Ingresa el precio.</p></ion-item>  
+<ion-item class="error-message" *ngIf="!tabla4Form.controls.price.valid && tabla4Form.controls.price.dirty"><p style="color:red;">Ingresa el precio.</p></ion-item>  
     
 <ion-item>
     <ion-label stacked>Peso</ion-label>
     <ion-input formControlName="weight"  type="number" placeholder="Ingresa el peso" [class.invalid]="!tabla4Form.controls.weight.valid && tabla4Form.controls.weight.dirty"></ion-input>
 </ion-item>
-<ion-item class="error-message" *ngIf="!tabla4Form.controls.weight.valid && tabla4Form.controls.weight.dirty"><p>Ingresa el peso.</p></ion-item>
+<ion-item class="error-message" *ngIf="!tabla4Form.controls.weight.valid && tabla4Form.controls.weight.dirty"><p style="color:red;">Ingresa el peso.</p></ion-item>
    
 <button ion-button type="submit" [disabled]="!tabla4Form.valid">Submit</button>
 </form>
@@ -67,6 +67,7 @@ export class Tabla4modal {
         mediaType: this.camera.MediaType.PICTURE
     }
     firestore = firebase.storage();
+
 
     constructor(private dom: DomSanitizer, private fp: FilePath, public zone: NgZone, private file: File, private camera: Camera, public navCtrl: NavController, public navParams: NavParams, private formBuilder: FormBuilder, angFire: AngularFire) {
         this.tablas4 = angFire.database.list('tabla4');
@@ -96,37 +97,49 @@ export class Tabla4modal {
         if (!this.tabla4Form.valid) {
             console.log("nice try!");
         } else {
-            if (this.tabla4 == "nuevo") {
-                let pushId = await this.tablas4.push({
-                    name: this.tabla4Form.value.name,
-                    description: this.tabla4Form.value.description,
+            if (self.tabla4 == "nuevo") {
+                let pushId = await self.tablas4.push({
+                    name: self.tabla4Form.value.name,
+                    description: self.tabla4Form.value.description,
                     image: "Foto_camara.jpg",
-                    price: this.tabla4Form.value.price,
-                    weight: this.tabla4Form.value.weight
+                    thumbnail: "",
+                    price: self.tabla4Form.value.price,
+                    weight: self.tabla4Form.value.weight
                 });
                 try {
-                    var fotoCamara = this.image;
+                    var fotoCamara = self.image;
                     //console.log(fotoCamara);
                     var fechaUnica = new Date().getTime();
                     var currentUserString = window.localStorage.getItem('currentuser');
                     var currenUserJSON = JSON.parse(currentUserString);
                     var uniqueNumber = pushId.getKey() + '_' + fechaUnica + '_' + currenUserJSON.uid;
-                    this.file.resolveLocalFilesystemUrl(fotoCamara).then((res: any) => {
+                    self.file.resolveLocalFilesystemUrl(fotoCamara).then((res: any) => {
                         res.file((resFile: any) => {
                             var reader = new FileReader();
                             reader.readAsArrayBuffer(resFile);
                             reader.onloadend = (evt: any) => {
                                 var imgBlob: any = new Blob([evt.target.result], {type: 'image/jpeg'});
-                                var imageStore = this.firestore.ref().child(String(uniqueNumber));
+                                var imageStore = self.firestore.ref().child(String("images/" + uniqueNumber));
                                 imageStore.put(imgBlob).then((result) => {
                                     console.log('Upload Success');
-                                    this.firestore.ref().child(String(uniqueNumber)).getDownloadURL().then((url) => {
-                                        this.zone.run(() => {
-                                            self.tablas4.update(pushId.getKey(), {  // ACTUALIZAR EL NOMBRE DE LA IMAGEN DE LA TABLA POR SU URL DE DESCARGA.
-                                                image: url
-                                            });
+                                    //HACER UN SET TIMEOUT HASTA QUE EL THUMBNAIL TERMINE DE CREARSE DEMORA AL REDEDOR DE 5 SEGUNDOS EN CREARSE.
+                                    setTimeout(function () {
+                                        self.firestore.ref().child("images/" + String(uniqueNumber)).getDownloadURL().then((url) => {   //obtenemos el url de la imagen
+                                            console.log("URL IMAGEN:");
+                                            console.log(url);
+                                            self.firestore.ref().child("images/thumb_" + String(uniqueNumber)).getDownloadURL().then((urlThumbnail) => {   //obtenemos el url del thumbnail
+                                                console.log("URL THUMBNAIL:");
+                                                console.log(urlThumbnail);
+                                                self.zone.run(() => {
+                                                    self.tablas4.update(pushId.getKey(), {  // ACTUALIZAR EL NOMBRE DE LA IMAGEN DE LA TABLA POR SU URL DE DESCARGA.
+                                                        image: url,
+                                                        thumbnail: urlThumbnail
+                                                    });
+                                                })
+                                            })
                                         })
-                                    })
+                                    }, 6000); //2 segundos despues obtiene el nombre del archivo para actualizar su URL en la BD.
+
                                 }).catch((err) => {
                                     console.log('Upload Failed' + err);
                                 })
@@ -142,12 +155,15 @@ export class Tabla4modal {
                 if (self.tabla4.image != self.tabla4Form.value.image) { //esto quiere decir que lo que haya en la propiedad image del objeto tabla es diferente al valor de la caja FotoCamara.jpg
                     self.tabla4Form.get("image").disable();  // aqui se deshabilita
                     var URLimagenAnterior = self.URLimagenAnterior;
-                    var arrayURLimagenAnterior = URLimagenAnterior.split("https://firebasestorage.googleapis.com/v0/b/firebase-crudionic.appspot.com/o/");
+                    var arrayURLimagenAnterior = URLimagenAnterior.split("https://firebasestorage.googleapis.com/v0/b/firebase-crudionic.appspot.com/o/images%2F");
                     var arrayNombreArchivoImagen = arrayURLimagenAnterior[1].split("?");
                     var nombreArchivoImagen = arrayNombreArchivoImagen[0];
+                    //console.log(nombreArchivoImagen);
                     // Delete the file
-                    var imagenParaBorrar = self.firestore.ref().child(nombreArchivoImagen);
+                    var imagenParaBorrar = self.firestore.ref().child("images/" + nombreArchivoImagen);
+                    var thumbnailParaBorrar = self.firestore.ref().child("images/thumb_" + nombreArchivoImagen);
                     imagenParaBorrar.delete().then(function () {
+                        thumbnailParaBorrar.delete();
                         // File deleted successfully
                         try {
                             var fotoCamara = self.image;
@@ -162,19 +178,29 @@ export class Tabla4modal {
                                     reader.readAsArrayBuffer(resFile);
                                     reader.onloadend = (evt: any) => {
                                         var imgBlob: any = new Blob([evt.target.result], {type: 'image/jpeg'});
-                                        var imageStore = self.firestore.ref().child(String(uniqueNumber));
+                                        var imageStore = self.firestore.ref().child(String("images/" + uniqueNumber));
                                         imageStore.put(imgBlob).then((result) => {
                                             console.log('Upload Success');
-                                            self.firestore.ref().child(String(uniqueNumber)).getDownloadURL().then((url) => {
-                                                self.zone.run(() => {
-                                                    self.tablas4.update(self.tabla4.$key, {  // ACTUALIZAR EL NOMBRE DE LA IMAGEN DE LA TABLA POR SU URL DE DESCARGA.
-                                                        name: self.tabla4Form.value.name,
-                                                        description: self.tabla4Form.value.description,
-                                                        image: url,
-                                                        price: self.tabla4Form.value.price,
-                                                        weight: self.tabla4Form.value.weight
-                                                    });
-                                                })
+                                            self.firestore.ref().child("images/" + String(uniqueNumber)).getDownloadURL().then((url) => {
+                                                //HACER UN SET TIMEOUT HASTA QUE EL THUMBNAIL TERMINE DE CREARSE DEMORA AL REDEDOR DE 5 SEGUNDOS EN CREARSE.
+                                                console.log("URL IMAGEN:");
+                                                console.log(url);
+                                                setTimeout(function () {
+                                                    self.firestore.ref().child("images/thumb_" + String(uniqueNumber)).getDownloadURL().then((urlThumbnail) => {   //obtenemos el url del thumbnail
+                                                        console.log("URL THUMBNAIL:");
+                                                        console.log(urlThumbnail);
+                                                        self.zone.run(() => {
+                                                            self.tablas4.update(self.tabla4.$key, {  // ACTUALIZAR EL NOMBRE DE LA IMAGEN DE LA TABLA POR SU URL DE DESCARGA.
+                                                                name: self.tabla4Form.value.name,
+                                                                description: self.tabla4Form.value.description,
+                                                                image: url,
+                                                                thumbnail: urlThumbnail,
+                                                                price: self.tabla4Form.value.price,
+                                                                weight: self.tabla4Form.value.weight
+                                                            });
+                                                        })
+                                                    })
+                                                }, 6000); //2 segundos despues obtiene el nombre del archivo para actualizar su URL en la BD.
                                             })
                                         }).catch((err) => {
                                             console.log('Upload Failed' + err);

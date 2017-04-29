@@ -6,7 +6,7 @@ page-tabla4modal {
 
   p {
     font-size: 0.8em;
-    color: #d2d2d2;
+    color: red;
   }
 
   ion-label {
@@ -18,10 +18,12 @@ page-tabla4modal {
   }
 
   .invalid {
-    border-bottom: 1px solid #FF6153;
+    border-bottom: 1px solid red;
+    color:red;
   }
 
   .error-message .item-inner {
     border-bottom: 0 !important;
+    color: red;
   }
 }

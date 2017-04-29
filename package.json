@@ -18,6 +18,7 @@
     "@angular/http": "4.0.0",
     "@angular/platform-browser": "4.0.0",
     "@angular/platform-browser-dynamic": "4.0.0",
+    "@google-cloud/storage": "^1.1.0",
     "@ionic-native/barcode-scanner": "^3.4.4",
     "@ionic-native/brightness": "^3.4.4",
     "@ionic-native/call-number": "^3.4.4",
