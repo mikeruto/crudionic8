@@ -37,7 +37,8 @@ export class MyApp {
             {title: 'QR', component: "Barcode", icon: 'qr-scanner'},
             {title: 'Camera upload firebase', component: "Cameraupload", icon: 'photos'},
             {title: 'Street view', component: "Streetview", icon: 'move'},
-            {title: 'Shake', component: "Shakepage", icon: 'resize'}
+            {title: 'Shake', component: "Shakepage", icon: 'resize'},
+            {title: 'Dibujo', component: "Dibujo", icon: 'brush'}
         ];
     }
 
