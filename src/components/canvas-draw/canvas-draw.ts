@@ -1,4 +1,4 @@
-import {Component, ViewChild, Renderer, Output, Input, EventEmitter} from '@angular/core';
+import {Component, ViewChild, Renderer, Output, Input, EventEmitter, ElementRef} from '@angular/core';
 import {Platform} from 'ionic-angular';
 
 const POUCH = [
@@ -16,14 +16,36 @@ const POUCH = [
 
 @Component({
     selector: 'canvas-draw',
-    templateUrl: 'canvas-draw.html'
+    template: `
+<ion-toolbar id="top-toolbar">
+<ion-buttons>
+    <button ion-button (click)="success = !success">Change Color</button>
+    <button  ion-button (click)="setColor('#fff')" >Erase</button> 
+ </ion-buttons>   
+    <div [hidden]="!success">
+        <canvas #palette style="background:white;" class='center'  (colorChanged)="setColor($event)" ></canvas>
+        <canvas #chooser style="background:white; margin-top: 20px; margin-bottom: 20px; " class='center'></canvas>
+    </div>
+</ion-toolbar>
+<canvas #myCanvas (touchstart)="handleStart($event)" (touchmove)="handleMove($event)"></canvas>
+<ion-toolbar id="bottom-toolbar">
+    <ion-buttons>
+        <button  ion-button (click)="changeSize(5)" >Small</button> 
+        <button  ion-button (click)="changeSize(10)" >Medium</button> 
+        <button  ion-button (click)="changeSize(15)" >Large</button> 
+        <button  ion-button (click)="changeSize(20)" >Extra Large</button> 
+    </ion-buttons>
+</ion-toolbar>
+  `
 })
 export class CanvasDraw {
     @ViewChild('myCanvas') canvas: any;
+    @ViewChild('changeColor') changeColor: ElementRef;
     canvasElement: any;
     lastX: number;
     lastY: number;
     brushsize: number = 10;
+    success: boolean = false;
 
     @Input() hexColor: string;
 
@@ -51,7 +73,7 @@ export class CanvasDraw {
 
 
     constructor(public platform: Platform, public renderer: Renderer) {
-        console.log('Hello CanvasDraw Component');
+        //console.log('Hello CanvasDraw Component');
     }
 
     ngAfterViewInit() {
@@ -136,7 +158,7 @@ export class CanvasDraw {
 
         var pixelRatio = this.getPixelRatio(this.ctxPalette);
 
-        console.log(pixelRatio);
+        //console.log(pixelRatio);
 
         var width = currentWidth * 90 / 100;
         var height = width * 0.5;
@@ -277,6 +299,7 @@ export class CanvasDraw {
     updateColor(event, canvas, context) {
         this.color = this.getColor(event, canvas, context, false);
         this.colorChanged.emit(this.color);
+        this.success = false;
     }
 
     getColor(event, canvas, context, fromChooser: boolean): string {
